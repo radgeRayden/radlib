@@ -24,6 +24,22 @@ inline &local (T ...)
         local T
             ...
 
+inline some? (x)
+    (not (none? x))
+
+inline raw-typecall (T ...)
+    ((superof T) . __typecall) T
+        ...
+
+inline copy* (original ...)
+    local result = (copy original)
+    va-lfold result
+        inline (key value result)
+            (getattr result key) = value
+            result
+        ...
+    deref result
+
 # inline va-reduce (f init ...)
 #     va-lfold init
 #         inline (__ )
