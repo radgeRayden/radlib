@@ -142,7 +142,6 @@ struct FileWatcher
                     break;
 
                 let ev = (bitcast (& (buf @ position)) (pointer inotify.event))
-                print (hex (deref ev.mask))
                 # handle event
                 va-map
                     inline (evk)
