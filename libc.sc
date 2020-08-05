@@ -43,4 +43,32 @@ define-scope _string
 
     unlet header
 
+define-scope stdlib
+    let header =
+        include "stdlib.h"
+
+    using header.extern
+    using header.define
+
+    unlet header
+
+define-scope stdio
+    let header =
+        include "stdio.h"
+
+    using header.extern
+    using header.define
+
+    unlet header
+
+define-scope pthread
+    let header =
+        include "pthread.h"
+    using header.extern
+    using header.define
+    using header.typedef
+
+    unlet header
+let pthread = (sanitize-scope pthread "^pthread_")
+
 locals;
