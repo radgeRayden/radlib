@@ -39,7 +39,8 @@ fn typename->Ctypename (sym)
     else
         tostring (T as Symbol)
 
-let wrapper-prefix = "scopes_wrapper__"
+let macro-wrapper-prefix = "scopes_macro_wrapper__"
+let constant-wrapper-prefix = "scopes_constant_wrapper__"
 
 fn gen-C-arglist (args)
     argcount := ('argcount args)
@@ -84,13 +85,13 @@ fn gen-macro-wrapper-fn (macro args)
 
     interpolate
         """"typeof(${macro}(${gen-C-arglist dummy-values}))
-            ${wrapper-prefix}${macro} (${gen-C-arglist fn-args}) {
+            ${macro-wrapper-prefix}${macro} (${gen-C-arglist fn-args}) {
                 return ${macro}(${gen-C-arglist forwarded});
             }
 
 fn gen-constant-wrapper-fn (macro)
     interpolate
-        """"typeof(${macro}) ${wrapper-prefix}${macro} () {
+        """"typeof(${macro}) ${constant-wrapper-prefix}${macro} () {
                 return ${macro};
             }
 
@@ -159,8 +160,7 @@ sugar foreign (args...)
 # leaving the original names accessible.
 inline sanitize-scope (scope prefix-patterns...)
     fold (scope = scope) for k v in scope
-        k as:= Symbol
-        key-name := (k as string)
+        let key-name = (k as Symbol as string)
 
         let new-name =
             va-lfold key-name

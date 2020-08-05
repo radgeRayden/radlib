@@ -10,7 +10,7 @@ define-scope errno
     using header.extern
     using header.define
 
-    let errno = scopes_wrapper__errno
+    let errno = scopes_constant_wrapper__errno
     unlet header
 
 define-scope unistd

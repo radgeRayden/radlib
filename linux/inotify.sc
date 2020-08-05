@@ -1,7 +1,7 @@
 using import ..core-extensions
 using import ..foreign
 
-let extern-pattern = "(scopes_wrapper|inotify_)"
+let extern-pattern = "(scopes_|inotify_)"
 
 define-scope inotify
     let header =
@@ -22,8 +22,8 @@ define-scope inotify
     unlet header
 
 define-scope inotify-macros
-    let IN_CLOSE = (inotify.scopes_wrapper__IN_CLOSE)
-    let IN_MOVE = (inotify.scopes_wrapper__IN_MOVE)
-    let IN_ALL_EVENTS = (inotify.scopes_wrapper__IN_ALL_EVENTS)
+    let IN_CLOSE = (inotify.scopes_constant_wrapper__IN_CLOSE)
+    let IN_MOVE = (inotify.scopes_constant_wrapper__IN_MOVE)
+    let IN_ALL_EVENTS = (inotify.scopes_constant_wrapper__IN_ALL_EVENTS)
 
 sanitize-scope (inotify .. inotify-macros) extern-pattern
