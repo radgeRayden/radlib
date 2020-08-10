@@ -1,18 +1,21 @@
 inline make-handle-type (name storageT dropf)
     typedef (tostring name) :: storageT
         inline __typecall (cls init)
-            bitcast (deref init) this-type
+            bitcast (imply init (storageof this-type)) this-type
+
         inline __imply (cls other-cls)
-            inline (self)
-                imply (storagecast (view self)) other-cls
+            static-if (imply? (storageof cls) other-cls)
+                inline (self)
+                    imply (storagecast (view self)) other-cls
+
         inline __rimply (cls other-cls)
-            this-type.__typecall
+            inline (val)
+                this-type val
+
         inline __as (cls other-cls)
             inline (self)
                 let value = (storagecast (view self))
                 value as other-cls
-        inline __toptr (self)
-            '__toptr (storagecast (view self))
 
 sugar define-scope (name body...)
     qq
@@ -44,5 +47,8 @@ inline copy* (original ...)
             result
         ...
     deref result
+
+sugar sugar-string (str)
+    sc_expand  str '() sugar-scope
 
 locals;
