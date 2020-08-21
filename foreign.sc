@@ -40,7 +40,9 @@ fn typename->Ctypename (sym)
         tostring (T as Symbol)
 
 let macro-wrapper-prefix = "scopes_macro_wrapper__"
+let macro-wrapper-regexp = (.. "^" macro-wrapper-prefix)
 let constant-wrapper-prefix = "scopes_constant_wrapper__"
+let constant-wrapper-regexp = (.. "^" constant-wrapper-prefix)
 
 fn gen-C-arglist (args)
     argcount := ('argcount args)
@@ -161,6 +163,17 @@ sugar foreign (args...)
 inline sanitize-scope (scope prefix-patterns...)
     fold (scope = scope) for k v in scope
         let key-name = (k as Symbol as string)
+
+        let match-macro? start count = ('match? macro-wrapper-regexp key-name)
+        if match-macro?
+            repeat ('bind scope (Symbol (rslice key-name count)) v)
+
+        let match-constant? start count = ('match? constant-wrapper-regexp key-name)
+        if match-constant?
+            # this will emit a call to the macro wrapper, meaning it won't be constant.
+            # It's a limitation of the current approach that I intend to lift when
+            # I have an AOT solution.
+            repeat ('bind scope (Symbol (rslice key-name count)) `(v))
 
         let new-name =
             va-lfold key-name
