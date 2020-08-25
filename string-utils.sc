@@ -242,4 +242,5 @@ static-if main-module?
 
 do
     let join-strings interpolate remove-prefix replace
+    let prefix:f = interpolate
     locals;
