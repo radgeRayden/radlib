@@ -161,30 +161,32 @@ sugar foreign (args...)
 # rebinds names in scope without their C prefixes (common in libraries), while
 # leaving the original names accessible.
 inline sanitize-scope (scope prefix-patterns...)
+    inline remove-prefixes (key-name)
+        va-lfold key-name
+            inline (__ignore pattern computed-name)
+                let match? start count = ('match? pattern key-name)
+                if match?
+                    # just remove the prefix (we assume pattern always matches start of line)
+                    rslice key-name count
+                else
+                    computed-name
+            prefix-patterns...
+
     fold (scope = scope) for k v in scope
         let key-name = (k as Symbol as string)
 
         let match-macro? start count = ('match? macro-wrapper-regexp key-name)
         if match-macro?
-            repeat ('bind scope (Symbol (rslice key-name count)) v)
+            repeat ('bind scope (Symbol (remove-prefixes (rslice key-name count))) v)
 
         let match-constant? start count = ('match? constant-wrapper-regexp key-name)
         if match-constant?
             # this will emit a call to the macro wrapper, meaning it won't be constant.
             # It's a limitation of the current approach that I intend to lift when
             # I have an AOT solution.
-            repeat ('bind scope (Symbol (rslice key-name count)) `(v))
+            repeat ('bind scope (Symbol (remove-prefixes (rslice key-name count))) `(v))
 
-        let new-name =
-            va-lfold key-name
-                inline (__ignore pattern computed-name)
-                    let match? start count = ('match? pattern key-name)
-                    if match?
-                        # just remove the prefix (we assume pattern always matches start of line)
-                        rslice key-name count
-                    else
-                        computed-name
-                prefix-patterns...
+        let new-name = (remove-prefixes key-name)
 
         if (new-name == key-name)
             scope
