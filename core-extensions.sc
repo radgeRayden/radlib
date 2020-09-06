@@ -1,3 +1,9 @@
+spice plain? (T)
+    T as:= type
+    `[('plain? T)]
+
+run-stage;
+
 inline make-handle-type (name storageT dropf)
     typedef (tostring name) :: storageT
         inline __typecall (cls init)
@@ -52,5 +58,17 @@ inline copy* (original ...)
 
 sugar sugar-string (str)
     sc_expand  str '() sugar-scope
+
+inline mutate (ref)
+    (value) -> (= ref value)
+
+inline Array-sizeof (v)
+    using import Array
+
+    let T = (typeof v)
+    static-if (not (T < Array))
+        static-error "Array-sizeof can only be used on Array values"
+    else
+        (countof v) * (sizeof T.ElementType)
 
 locals;
