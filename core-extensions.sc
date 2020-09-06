@@ -17,6 +17,8 @@ inline make-handle-type (name storageT dropf)
                 let value = (storagecast (view self))
                 value as other-cls
 
+        let __drop = dropf
+
 sugar define-scope (name body...)
     qq
         [let] [name] =
