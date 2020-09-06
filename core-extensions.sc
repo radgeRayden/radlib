@@ -1,3 +1,15 @@
+spice _enum-class-constructor (cls v)
+    cls as:= type
+    T := ('typeof v)
+    let fields = ('@ cls '__fields__)
+    for ft in ('args fields)
+        ft as:= type
+        let Type = (('@ ft 'Type) as type)
+        if (('element@ Type 0) == T)
+            return `([('@ ft '__typecall)] ft v)
+    hide-traceback;
+    error (.. "type " (tostring cls) " doesn't contain subtype " (tostring T))
+
 spice plain? (T)
     T as:= type
     `[('plain? T)]
@@ -70,5 +82,8 @@ inline Array-sizeof (v)
         static-error "Array-sizeof can only be used on Array values"
     else
         (countof v) * (sizeof T.ElementType)
+
+inline enum-class-constructor (cls v)
+    _enum-class-constructor cls v
 
 locals;
