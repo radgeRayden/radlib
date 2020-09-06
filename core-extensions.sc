@@ -86,4 +86,8 @@ inline Array-sizeof (v)
 inline enum-class-constructor (cls v)
     _enum-class-constructor cls v
 
+inline va-tail (...)
+    let __ args = (va-split 1 ...)
+    args;
+
 locals;
