@@ -98,6 +98,6 @@ inline struct-equality-by-field (T)
                     inline (__ f result)
                         let k = (keyof f.Type)
                         result and ((getattr l k) == (getattr r k))
-                    this-type.__fields__
+                    T.__fields__
 
 locals;
