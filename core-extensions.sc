@@ -87,7 +87,17 @@ inline enum-class-constructor (cls v)
     _enum-class-constructor cls v
 
 inline va-tail (...)
-    let __ args = (va-split 1 ...)
-    args;
+    let __ args... = ...
+    args...
+
+inline struct-equality-by-field (T)
+    inline (lhsT rhsT)
+        static-if (lhsT == rhsT)
+            inline (l r)
+                va-lfold true
+                    inline (__ f result)
+                        let k = (keyof f.Type)
+                        result and ((getattr l k) == (getattr r k))
+                    this-type.__fields__
 
 locals;
