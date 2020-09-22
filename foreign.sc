@@ -1,5 +1,5 @@
 using import .core-extensions
-using import .string-utils
+using import .stringtools
 
 fn typename->Ctypename (sym)
     let T =
