@@ -17,24 +17,9 @@ spice plain? (T)
 run-stage;
 
 inline make-handle-type (name storageT dropf)
-    typedef (tostring name) :: storageT
+    typedef (tostring name) <:: storageT
         inline __typecall (cls init)
             bitcast (imply init (storageof this-type)) this-type
-
-        inline __imply (cls other-cls)
-            static-if (imply? (storageof cls) other-cls)
-                inline (self)
-                    imply (storagecast (view self)) other-cls
-
-        inline __rimply (cls other-cls)
-            inline (val)
-                this-type val
-
-        inline __as (cls other-cls)
-            inline (self)
-                let value = (storagecast (view self))
-                value as other-cls
-
         let __drop = dropf
 
 sugar define-scope (name body...)
