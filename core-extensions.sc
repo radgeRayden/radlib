@@ -18,8 +18,10 @@ run-stage;
 
 inline make-handle-type (name storageT dropf)
     typedef (tostring name) <:: storageT
-        inline __typecall (cls init)
-            bitcast (imply init (storageof this-type)) this-type
+        inline... __typecall (cls init)
+            bitcast init this-type
+        case (cls)
+            bitcast (undef storageT) this-type
         let __drop = dropf
 
 sugar define-scope (name body...)
