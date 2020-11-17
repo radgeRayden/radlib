@@ -24,7 +24,7 @@ define-scope unistd
     unlet header
 
 # as to not shadow scopes' error function
-define-scope _error
+define-scope error
     let header =
         include "error.h"
 
@@ -34,7 +34,7 @@ define-scope _error
     unlet header
 
 # as to not shadow scopes' string type
-define-scope _string
+define-scope string
     let header =
         include "string.h"
 
@@ -71,4 +71,13 @@ define-scope pthread
     unlet header
 let pthread = (sanitize-scope pthread "^pthread_")
 
-locals;
+do
+    let
+        errno
+        unistd
+        error
+        string
+        stdlib
+        stdio
+        pthread
+    locals;
