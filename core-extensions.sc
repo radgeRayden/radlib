@@ -14,7 +14,40 @@ spice plain? (T)
     T as:= type
     `[('plain? T)]
 
+
 run-stage;
+
+inline semantically-bind-types (T1 T2 implyf rimplyf)
+    typedef+ T1
+        inline gen-op (op)
+            inline (lhsT rhsT)
+                static-if (lhsT == this-type)
+                    inline (a b)
+                        op (imply a T2) b
+                elseif (rhsT == this-type)
+                    inline (a b)
+                        op a (imply b T2)
+
+        inline __imply (selfT otherT)
+            static-if (otherT == T2)
+                implyf
+
+        inline __rimply (otherT selfT)
+            inline (other)
+                rimplyf (imply other T2)
+
+        let __+ = (gen-op +)
+        let __- = (gen-op -)
+        let __* = (gen-op *)
+        let __/ = (gen-op /)
+        let __// = (gen-op //)
+
+        inline __repr (self)
+            .. (repr (imply self T2))
+                default-styler style-operator ":"
+                default-styler style-type (tostring this-type)
+
+        unlet gen-op
 
 inline make-handle-type (name storageT dropf)
     typedef (tostring name) <:: storageT
