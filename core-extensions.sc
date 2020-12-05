@@ -80,6 +80,7 @@ inline raw-typecall (T ...)
         ...
 
 inline copy* (original ...)
+    """"Copy composite type while overriding fields as desired.
     local result = (copy original)
     va-lfold result
         inline (key value result)
