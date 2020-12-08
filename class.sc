@@ -51,5 +51,5 @@ inline class (enum_)
                     'unsafe-extract-payload self otherT
 
 do
-    let class
+    let class decorate-enum
     locals;
