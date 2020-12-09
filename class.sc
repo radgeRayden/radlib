@@ -1,5 +1,6 @@
 """"class.sc
-    Class decorator implementation that augments an Enum type so every tag acts as a subclass.
+    Offers options to augment an Enum type so that it works as a class with different sub types.
+    A class sugar, a decorator and an inline to augment a previously defined enum are available.
 
 using import enum
 fn find-enum-tag-by-type (cls T)
@@ -36,7 +37,7 @@ inline enum-class-constructor (cls v)
 
 let decorate-enum = decorate-struct
 
-inline class (enum_)
+inline make-class (enum_)
     typedef+ enum_
         let __typecall = enum-class-constructor
         inline __as (selfT otherT)
@@ -50,6 +51,32 @@ inline class (enum_)
 
                     'unsafe-extract-payload self otherT
 
+sugar class (name body...)
+    let use-scope body =
+        sugar-match body...
+        case (('use scope) rest...)
+            let scope = ((sc_prove (sc_expand scope '() sugar-scope) ()) as Scope)
+            _ scope rest...
+        default
+            _ (Scope) (body... as list)
+
+    let tags =
+        loop (index tags = -1 '())
+            let key value index =
+                sc_scope_next use-scope index
+            if (index < 0)
+                break ('reverse tags)
+            _ index
+                cons
+                    qq
+                        [key] : [value]
+                    tags
+    qq
+        [enum] [name]
+            unquote-splice tags
+            unquote-splice body
+        [make-class] [name]
+
 do
-    let class decorate-enum
+    let class decorate-enum make-class
     locals;
