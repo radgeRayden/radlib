@@ -72,10 +72,11 @@ sugar class (name body...)
                         [key] : [value]
                     tags
     qq
-        [enum] [name]
-            unquote-splice tags
-            unquote-splice body
-        [make-class] [name]
+        [embed]
+            [enum] [name]
+                unquote-splice tags
+                unquote-splice body
+            [make-class] [name]
 
 do
     let class decorate-enum make-class
