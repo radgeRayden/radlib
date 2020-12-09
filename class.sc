@@ -32,7 +32,7 @@ spice has-subtype? (enumT subT)
 
 run-stage;
 
-inline enum-class-constructor (cls v)
+inline... enum-class-constructor (cls v)
     _enum-class-constructor cls v
 
 let decorate-enum = decorate-struct
