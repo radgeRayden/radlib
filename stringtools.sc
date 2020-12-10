@@ -209,6 +209,6 @@ inline format (fmt ...)
     deref buf
 
 do
-    let join-strings join-strings-array interpolate remove-prefix replace build-String
+    let join-strings join-strings-array interpolate remove-prefix replace build-String format
     let prefix:f = interpolate
     locals;
