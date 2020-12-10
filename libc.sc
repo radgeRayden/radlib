@@ -1,17 +1,4 @@
 using import .core-extensions
-using import .foreign
-
-define-scope errno
-    let header =
-        foreign "errno.h"
-            with-constants
-                errno
-
-    using header.extern
-    using header.define
-
-    let errno = scopes_constant_wrapper__errno
-    unlet header
 
 define-scope unistd
     let header =
@@ -69,11 +56,9 @@ define-scope pthread
     using header.typedef
 
     unlet header
-let pthread = (sanitize-scope pthread "^pthread_")
 
 do
     let
-        errno
         unistd
         error
         string

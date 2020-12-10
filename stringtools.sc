@@ -1,4 +1,5 @@
 using import String
+let C = (import .libc)
 
 fn remove-prefix (input prefix)
     imply input string
@@ -184,7 +185,28 @@ spice build-String (...)
     spice-quote
         .. arglist
 
-run-stage;
+inline format (fmt ...)
+    let ... =
+        va-map
+            inline (v)
+                static-match (typeof v)
+                case string
+                    v as rawstring
+                case String
+                    v as rawstring
+                default
+                    v
+            ...
+
+    let necessary = (C.stdio.snprintf null 0 fmt ...)
+    if (necessary < 0)
+        return (String "formatting error")
+
+    local buf = (String (necessary + 1))
+    let written = (C.stdio.snprintf buf._items (necessary + 1) fmt ...)
+    if (written == necessary)
+        buf._count = written
+    deref buf
 
 do
     let join-strings join-strings-array interpolate remove-prefix replace build-String
