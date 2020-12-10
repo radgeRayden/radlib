@@ -47,7 +47,7 @@ inline make-class (enum_)
             elseif (has-subtype? selfT otherT)
                 inline (self)
                     if (not (('literal self) == ((type->enum-tag selfT otherT) . Literal)))
-                        assert false (.. "tried to cast " (repr selfT) " to incorrect subtype " (repr otherT))
+                        assert false (.. "tried to cast " (tostring selfT) " to incorrect subtype " (tostring otherT))
 
                     'unsafe-extract-payload self otherT
 
