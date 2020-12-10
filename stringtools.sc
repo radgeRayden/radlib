@@ -1,3 +1,5 @@
+using import String
+
 fn remove-prefix (input prefix)
     imply input string
     imply prefix string
@@ -171,8 +173,20 @@ fn... replace (str : string, substring : string, substitution : string)
 
     string new-string-mem result-size
 
+using import itertools
+spice build-String (...)
+    let expr = (sc_expression_new)
+    let arglist =
+        ->> ('args ...)
+            map
+                (arg) -> `(String arg)
+            Value.arglist-sink 16
+    spice-quote
+        .. arglist
+
+run-stage;
 
 do
-    let join-strings join-strings-array interpolate remove-prefix replace
+    let join-strings join-strings-array interpolate remove-prefix replace build-String
     let prefix:f = interpolate
     locals;
