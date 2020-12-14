@@ -19,6 +19,7 @@ inline expand-inline (f args...)
 
 do
     let
+        has-symbol?
         member-typeof
         expand-inline
     locals;
