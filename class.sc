@@ -60,6 +60,23 @@ sugar class (name body...)
         default
             _ (Scope) (body... as list)
 
+    inline make-method (name args)
+        qq
+            [inline] [name] (self (unquote-splice args))
+                'apply self
+                    inline (T self)
+                        (sugar-quote [name]) self (unquote-splice args)
+
+    let methods rest =
+        fold (methods rest = '() '()) for at in body
+            sugar-match (at as list)
+            case ('method name ('self args...))
+                _
+                    cons (make-method name args...) methods
+                    rest
+            default
+                _ methods (cons at rest)
+
     let tags =
         loop (index tags = -1 '())
             let key value index =
@@ -75,7 +92,8 @@ sugar class (name body...)
         [embed]
             [enum] [name]
                 unquote-splice tags
-                unquote-splice body
+                unquote-splice ('reverse rest)
+                unquote-splice methods
             [make-class] [name]
 
 do
