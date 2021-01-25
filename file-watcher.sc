@@ -11,6 +11,18 @@ using import .foreign
 import .libc
 inotify := (import .linux.inotify)
 
+vvv bind errno
+do
+    let code =
+        include
+            """"#include <errno.h>
+                typeof(errno) scopes_wrapper_errno () {
+                    return errno;
+                }
+    let errno = code.extern.scopes_wrapper_errno
+    using code.define
+    locals;
+
 enum EventKind
     ACCESSED = inotify.IN_ACCESS
     MODIFIED = inotify.IN_MODIFY
@@ -88,7 +100,7 @@ struct FileWatcher
                 WatchDescriptor
                     handle = wd
                     event-kind = event-index
-                callback
+                imply callback FileEventCallback
             # try
             #     local c = ('get self.event-callbacks wd)
             #     'set c event callback
@@ -134,8 +146,7 @@ struct FileWatcher
             local buf : (array i8 4096)
             let len = (read self._fd &buf (sizeof buf))
             if (len == -1) # nothing to read
-                using libc.errno
-                assert ((errno) == EAGAIN)
+                assert ((errno.errno) == errno.EAGAIN)
                 break;
             loop (position = 0:i64)
                 if (position >= len)

@@ -26,4 +26,6 @@ define-scope inotify-macros
     let IN_MOVE = (inotify.scopes_constant_wrapper__IN_MOVE)
     let IN_ALL_EVENTS = (inotify.scopes_constant_wrapper__IN_ALL_EVENTS)
 
-sanitize-scope (inotify .. inotify-macros) extern-pattern
+..
+    inotify-macros
+    sanitize-scope inotify extern-pattern
